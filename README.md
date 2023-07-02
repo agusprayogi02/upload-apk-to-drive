@@ -1,5 +1,5 @@
-# Upload PDF to Google Drive
-This GitHub action is designed to upload pdf to drive.
+# Upload APK to Google Drive
+This GitHub action is designed to upload APK to drive.
 
 ## Setup
 
@@ -27,9 +27,9 @@ jobs:
           root_file: main.tex
           compiler: pdflatex
       - name: Upload PDF to Google Drive
-        uses: baymac/upload-pdf-to-drive@main
+        uses: agusprayogi02/upload-apk-to-drive@main
         with:
-          target: main.pdf
+          target: app-release.apk
           credentials: ${{ secrets.SVC_ACC_BASE64 }}
           folderId: <YOUR_DRIVE_FOLDER_ID>
           filename: <ANY_CUSTOM_NAME_WITHOUT_EXTENSION> # optional (defaults to upload.pdf)

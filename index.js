@@ -9,7 +9,7 @@ const credentials = actions.getInput('credentials', { required: true });
 const folderId = actions.getInput('folderId', { required: true });
 /** Local path to the file/folder to upload */
 const target = actions.getInput('target', { required: true });
-/** Optional name for the pdf file */
+/** Optional name for the apk file */
 const filename = actions.getInput('filename', { required: false });
 /** Optional should overwrite or not */
 const overwrite = actions.getInput('overwrite', { required: false });
@@ -27,13 +27,13 @@ async function main() {
 }
 
 function getFileName() {
-  return filename.length > 0 ? `${filename}.pdf` : 'upload.pdf'
+  return filename.length > 0 ? `${filename}.apk` : 'app-release.apk'
 }
 
 function doList(pageToken) {
   return new Promise((resolve, reject) => {
     drive.files.list({
-      q: "mimeType='application/pdf'",
+      q: "mimeType='application/vnd.android.package-archive'",
       fields: 'nextPageToken, files(id,name,parents,webViewLink)',
       spaces: 'drive',
       pageToken: pageToken
@@ -41,7 +41,7 @@ function doList(pageToken) {
       if (err) {
         reject(err)
       } else {
-        const searchedFile = res.data.files.find(file => file.parents[0] === folderId && file.name === `${filename}.pdf`);
+        const searchedFile = res.data.files.find(file => file.parents[0] === folderId && file.name === `${filename}.apk`);
         const nextPageToken = res.nextPageToken;
         resolve({ searchedFile, nextPageToken });
       }
@@ -100,7 +100,7 @@ async function uploadToDrive() {
     parents: [folderId]
   };
   var media = {
-    mimeType: 'application/pdf',
+    mimeType: 'application/vnd.android.package-archive',
     body: fs.createReadStream(target)
   };
   if (overwrite === 'true') {
